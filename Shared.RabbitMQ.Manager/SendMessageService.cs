@@ -6,12 +6,12 @@ using Shared.RabbitMQ.Manager.Model;
 
 namespace Shared.RabbitMQ.Manager
 {
-    internal class SendMessageMange : ISend
+    internal class SendMessageService : ISend
     {
         public async Task SendMsgAsync(PushMessageArgs pushMsgArgs, IBus bus)
         {
             Message<object> message = new Message<object>(pushMsgArgs.SendMsg);
-            var ex = RabbitMQManager.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
+            var ex = RabbitMQExtension.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
             await bus.Advanced.PublishAsync<object>(ex, pushMsgArgs.RouteName.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
             {
                 if (task.IsCompleted || !task.IsFaulted);
@@ -21,7 +21,7 @@ namespace Shared.RabbitMQ.Manager
         public void SendMsg(PushMessageArgs pushMsgArgs, IBus bus)
         {
             Message<object> message = new Message<object>(pushMsgArgs.SendMsg);
-            var exchange = RabbitMQManager.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
+            var exchange = RabbitMQExtension.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
             bus.Advanced.Publish<object>(exchange, pushMsgArgs.RouteName.ToSafeString(), false, (IMessage<object>)message);
         }
     }

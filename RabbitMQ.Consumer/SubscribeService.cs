@@ -6,13 +6,15 @@ namespace RabbitMQ.Consumer
 {
     public class SubscribeService
     {
-        private readonly RabbitMQManager _manager;
+        private readonly RabbitMQConsumerService _consumerService;
         private readonly CommonMessageConsume _commonConsume;
+        private readonly FanoutMessageConsume _fanoutConsume;
 
-        public SubscribeService(RabbitMQManager manager, CommonMessageConsume commonConsume)
+        public SubscribeService(RabbitMQConsumerService consumerService, CommonMessageConsume commonConsume, FanoutMessageConsume fanoutConsume)
         {
-            _manager = manager;
+            _consumerService = consumerService;
             _commonConsume = commonConsume;
+            _fanoutConsume = fanoutConsume;
         }
 
 
@@ -28,7 +30,7 @@ namespace RabbitMQ.Consumer
                 RabbitQueueName = "demo.test.direct.queue",
                 RouteName = "demo.1"
             };
-            _manager.Subscribe<CommonMessageConsume>(directArgs, _commonConsume);
+            _consumerService.Subscribe<CommonMessageConsume>(directArgs, _commonConsume);
 
             #endregion
 
@@ -40,7 +42,7 @@ namespace RabbitMQ.Consumer
                 ExchangeName = "demo.test.fanout",
                 RabbitQueueName = "demo.test.fanout.queue"
             };
-            _manager.Subscribe<CommonMessageConsume>(fanoutArgs, _commonConsume);
+            _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs, _fanoutConsume);
 
             var fanoutArgs2 = new MessageArgs()
             {
@@ -48,7 +50,7 @@ namespace RabbitMQ.Consumer
                 ExchangeName = "demo.test.fanout",
                 RabbitQueueName = "demo.test.fanout.queue.2"
             };
-            _manager.Subscribe<CommonMessageConsume>(fanoutArgs2, _commonConsume);
+            _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs2, _fanoutConsume);
 
             #endregion
 
@@ -61,7 +63,7 @@ namespace RabbitMQ.Consumer
                 RabbitQueueName = "demo.test.topic.queue",
                 RouteName = "demo.topic.*"
             };
-            _manager.Subscribe<CommonMessageConsume>(topicArgs, _commonConsume);
+            _consumerService.Subscribe<CommonMessageConsume>(topicArgs, _commonConsume);
 
             #endregion
 

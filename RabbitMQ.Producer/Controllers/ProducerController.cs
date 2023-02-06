@@ -9,18 +9,18 @@ namespace RabbitMQ.Producer.Controllers
     public class ProducerController : ControllerBase
     {
         private readonly ILogger<ProducerController> _logger;
-        private readonly RabbitMQManager _mqManager;
+        private readonly RabbitMQProducerService _mqService;
 
-        public ProducerController(ILogger<ProducerController> logger, RabbitMQManager mqManager)
+        public ProducerController(ILogger<ProducerController> logger, RabbitMQProducerService mqService)
         {
             _logger = logger;
-            _mqManager = mqManager;
+            _mqService = mqService;
         }
 
         [HttpPost("SendDirect")]
         public async Task SendDirectAsync (string message)
         {
-            await _mqManager.SendDirectAsync<string>(new SendArgs<string>
+            await _mqService.SendDirectAsync<string>(new SendArgs<string>
             {
                 ExchangeName = "demo.test.direct",
                 RouteKey = "demo.1",
@@ -31,7 +31,7 @@ namespace RabbitMQ.Producer.Controllers
         [HttpPost("SendFanout")]
         public async Task SendFanoutAsync(string message)
         {
-            await _mqManager.SendFanoutAsync<string>(new SendArgs<string>
+            await _mqService.SendFanoutAsync<string>(new SendArgs<string>
             {
                 ExchangeName = "demo.test.fanout",
                 SendData = $"Fanout({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
@@ -41,7 +41,7 @@ namespace RabbitMQ.Producer.Controllers
         [HttpPost("SendTopic")]
         public async Task SendTopicAsync(string message)
         {
-            await _mqManager.SendTopicAsync<string>(new SendArgs<string>
+            await _mqService.SendTopicAsync<string>(new SendArgs<string>
             {
                 ExchangeName = "demo.test.topic",
                 SendData = $"Topic({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}",

@@ -23,10 +23,11 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 //builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacModuleRegister()));
 
 // RabbitMQ DI
-builder.Services.AddSingleton(new RabbitMQManager(RabbitHutch.CreateBus(builder.Configuration["RabbitMqTcpConnectionString"])));
+builder.Services.AddSingleton(new RabbitMQConsumerService(RabbitHutch.CreateBus(builder.Configuration["RabbitMqTcpConnectionString"])));
 
 // ≈‹ßÛDI IMessageConsume
 builder.Services.AddTransient<CommonMessageConsume>();
+builder.Services.AddTransient<FanoutMessageConsume>();
 
 builder.Services.AddTransient<SubscribeService>();
 
