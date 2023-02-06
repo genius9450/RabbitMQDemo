@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // RabbitMQ DI
-builder.Services.AddSingleton(new RabbitMQProducerService(RabbitHutch.CreateBus(builder.Configuration["RabbitMqTcpConnectionString"])));
+builder.Services.AddSingleton(RabbitHutch.CreateBus(builder.Configuration.GetValue<string>("RabbitMQConfig:ConnectionString")));
+builder.Services.AddTransient<RabbitMQProducerService>();
 
 var app = builder.Build();
 

@@ -15,7 +15,10 @@ namespace Shared.RabbitMQ.Manager
     {
         private readonly IBus _bus;
 
-        public RabbitMQProducerService(IBus bus) => this._bus = bus;
+        public RabbitMQProducerService(IBus bus)
+        {
+            _bus = bus;
+        }
 
         /// <summary>
         /// 推播訊息

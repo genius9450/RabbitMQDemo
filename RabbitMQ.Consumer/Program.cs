@@ -19,11 +19,10 @@ builder.Services.AddSwaggerGen();
 
 // 初始化並建立一個實例
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-// 註冊autofac這個容器
-//builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacModuleRegister()));
 
 // RabbitMQ DI
-builder.Services.AddSingleton(new RabbitMQConsumerService(RabbitHutch.CreateBus(builder.Configuration["RabbitMqTcpConnectionString"])));
+builder.Services.AddSingleton(RabbitHutch.CreateBus(builder.Configuration.GetValue<string>("RabbitMQConfig:ConnectionString")));
+builder.Services.AddTransient<RabbitMQConsumerService>();
 
 // 變更DI IMessageConsume
 builder.Services.AddTransient<CommonMessageConsume>();

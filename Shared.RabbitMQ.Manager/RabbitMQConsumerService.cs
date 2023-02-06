@@ -17,7 +17,10 @@ namespace Shared.RabbitMQ.Manager
         private readonly IBus _bus;
         private static readonly object LockHelper = new();
 
-        public RabbitMQConsumerService(IBus bus) => this._bus = bus;
+        public RabbitMQConsumerService(IBus bus)
+        {
+            _bus = bus;
+        }
 
         /// <summary>
         /// 訂閱
