@@ -22,10 +22,10 @@ namespace RabbitMQ.Producer.Controllers
         {
             await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>()
             {
-                SendType = SendType.direct,
-                ExchangeName = "demo.test.direct",
+                SendType = SendType.Direct,
+                ExchangeName = "demo.test.Direct",
                 RouteKey = "demo.1",
-                SendData = $"direct({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
+                SendData = $"Direct({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
             });
         }
 
@@ -34,9 +34,9 @@ namespace RabbitMQ.Producer.Controllers
         {
             await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>
             {
-                SendType = SendType.fanout,
-                ExchangeName = "demo.test.fanout",
-                SendData = $"fanout({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
+                SendType = SendType.Fanout,
+                ExchangeName = "demo.test.Fanout",
+                SendData = $"Fanout({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
             });
         }
 
@@ -45,10 +45,10 @@ namespace RabbitMQ.Producer.Controllers
         {
             await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>
             {
-                SendType = SendType.topic,
-                ExchangeName = "demo.test.topic",
-                SendData = $"topic({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}",
-                RouteKey = "demo.topic.1"
+                SendType = SendType.Topic,
+                ExchangeName = "demo.test.Topic",
+                SendData = $"Topic({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}",
+                RouteKey = "demo.Topic.1"
             });
         }
 

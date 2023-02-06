@@ -20,24 +20,24 @@ namespace Shared.RabbitMQ.Manager
         /// <summary>
         /// 推播訊息
         /// </summary>
-        /// <param name="pushMessageArgs"></param>
-        public void PushMessage<T>(PushMessageArgs<T> pushMessageArgs) where T : class
+        /// <param name="args"></param>
+        public void PushMessage<T>(PushMessageArgs<T> args) where T : class
         {
-            var message = new Message<object>(pushMessageArgs.SendData);
-            var exchange = _bus.Advanced.ExchangeDeclare(pushMessageArgs.ExchangeName, pushMessageArgs.SendType.ToString());
-            _bus.Advanced.Publish<object>(exchange, pushMessageArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message);
+            var message = new Message<object>(args.SendData);
+            var exchange = _bus.DeclareExchange(args.SendType, args.ExchangeName);
+            _bus.Advanced.Publish<object>(exchange, args.RouteKey.ToSafeString(), false, (IMessage<object>)message);
         }
 
         /// <summary>
         /// 推播訊息(非同步)
         /// </summary>
-        /// <param name="pushMessageArgs"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
-        public async Task PushMessageAsync<T>(PushMessageArgs<T> pushMessageArgs) where T : class
+        public async Task PushMessageAsync<T>(PushMessageArgs<T> args) where T : class
         {
-            var message = new Message<object>(pushMessageArgs.SendData);
-            var ex = await _bus.Advanced.ExchangeDeclareAsync(pushMessageArgs.ExchangeName, pushMessageArgs.SendType.ToString());
-            await _bus.Advanced.PublishAsync<object>(ex, pushMessageArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
+            var message = new Message<object>(args.SendData);
+            var ex = _bus.DeclareExchange(args.SendType, args.ExchangeName);
+            await _bus.Advanced.PublishAsync<object>(ex, args.RouteKey.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
             {
                 if (task.IsCompleted || !task.IsFaulted) ;
             }));

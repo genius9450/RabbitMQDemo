@@ -14,8 +14,8 @@
 
     public enum SendType
     {
-        direct = 1,
-        fanout = 2,
-        topic = 3,
+        Direct = 1,
+        Fanout = 2,
+        Topic = 3,
     }
 }

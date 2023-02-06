@@ -25,9 +25,9 @@ namespace RabbitMQ.Consumer
 
             var directArgs = new MessageArgs()
             {
-                SendType = SendType.direct,
-                ExchangeName = "demo.test.direct",
-                RabbitQueueName = "demo.test.direct.queue",
+                SendType = SendType.Direct,
+                ExchangeName = "demo.test.Direct",
+                RabbitQueueName = "demo.test.Direct.queue",
                 RouteName = "demo.1"
             };
             _consumerService.Subscribe<CommonMessageConsume>(directArgs, _commonConsume);
@@ -38,17 +38,17 @@ namespace RabbitMQ.Consumer
 
             var fanoutArgs = new MessageArgs()
             {
-                SendType = SendType.fanout,
-                ExchangeName = "demo.test.fanout",
-                RabbitQueueName = "demo.test.fanout.queue"
+                SendType = SendType.Fanout,
+                ExchangeName = "demo.test.Fanout",
+                RabbitQueueName = "demo.test.Fanout.queue"
             };
             _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs, _fanoutConsume);
 
             var fanoutArgs2 = new MessageArgs()
             {
-                SendType = SendType.fanout,
-                ExchangeName = "demo.test.fanout",
-                RabbitQueueName = "demo.test.fanout.queue.2"
+                SendType = SendType.Fanout,
+                ExchangeName = "demo.test.Fanout",
+                RabbitQueueName = "demo.test.Fanout.queue.2"
             };
             _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs2, _fanoutConsume);
 
@@ -58,10 +58,10 @@ namespace RabbitMQ.Consumer
 
             var topicArgs = new MessageArgs()
             {
-                SendType = SendType.topic,
-                ExchangeName = "demo.test.topic",
-                RabbitQueueName = "demo.test.topic.queue",
-                RouteName = "demo.topic.*"
+                SendType = SendType.Topic,
+                ExchangeName = "demo.test.Topic",
+                RabbitQueueName = "demo.test.Topic.queue",
+                RouteName = "demo.Topic.*"
             };
             _consumerService.Subscribe<CommonMessageConsume>(topicArgs, _commonConsume);
 

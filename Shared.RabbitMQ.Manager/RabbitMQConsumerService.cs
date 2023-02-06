@@ -30,7 +30,7 @@ namespace Shared.RabbitMQ.Manager
             if (string.IsNullOrEmpty(args.ExchangeName))
                 return;
 
-            var exchange = _bus.Advanced.ExchangeDeclare(args.ExchangeName, args.SendType.ToString());
+            var exchange = _bus.DeclareExchange(args.SendType, args.ExchangeName);
             var queue = string.IsNullOrEmpty(args.RabbitQueueName) ? _bus.Advanced.QueueDeclare() : _bus.Advanced.QueueDeclare(args.RabbitQueueName);
 
             this._bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
