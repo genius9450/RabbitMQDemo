@@ -37,10 +37,10 @@ namespace Shared.RabbitMQ.Manager
         {
             var message = new Message<object>(args.SendData);
             var ex = _bus.DeclareExchange(args.SendType, args.ExchangeName);
-            await _bus.Advanced.PublishAsync<object>(ex, args.RouteKey.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
+            await _bus.Advanced.PublishAsync<object>(ex, args.RouteKey.ToSafeString(), false, message).ContinueWith(task =>
             {
                 if (task.IsCompleted || !task.IsFaulted) ;
-            }));
+            });
         }
 
     }

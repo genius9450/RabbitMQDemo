@@ -25,7 +25,7 @@ namespace Shared.RabbitMQ.Manager
         /// <typeparam name="TConsume"></typeparam>
         /// <param name="args"></param>
         /// <param name="consume"></param>
-        public void Subscribe<TConsume>(MessageArgs args, TConsume consume) where TConsume : IMessageConsume
+        public void Subscribe<TConsume>(SubscribeArgs args, TConsume consume) where TConsume : IMessageConsume
         {
             if (string.IsNullOrEmpty(args.ExchangeName))
                 return;
@@ -33,8 +33,8 @@ namespace Shared.RabbitMQ.Manager
             var exchange = _bus.DeclareExchange(args.SendType, args.ExchangeName);
             var queue = string.IsNullOrEmpty(args.RabbitQueueName) ? _bus.Advanced.QueueDeclare() : _bus.Advanced.QueueDeclare(args.RabbitQueueName);
 
-            this._bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
-            this._bus.Advanced.Consume(queue, (body, properties, info) =>
+            _bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
+            _bus.Advanced.Consume(queue, (body, properties, info) =>
             {
                 var lockTaken = false;
                 try

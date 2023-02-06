@@ -23,7 +23,7 @@ namespace RabbitMQ.Consumer
 
             #region 訂閱Direct模式
 
-            var directArgs = new MessageArgs()
+            var directArgs = new SubscribeArgs()
             {
                 SendType = SendType.Direct,
                 ExchangeName = "demo.test.Direct",
@@ -36,7 +36,7 @@ namespace RabbitMQ.Consumer
 
             #region 訂閱Fanout模式
 
-            var fanoutArgs = new MessageArgs()
+            var fanoutArgs = new SubscribeArgs()
             {
                 SendType = SendType.Fanout,
                 ExchangeName = "demo.test.Fanout",
@@ -44,7 +44,7 @@ namespace RabbitMQ.Consumer
             };
             _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs, _fanoutConsume);
 
-            var fanoutArgs2 = new MessageArgs()
+            var fanoutArgs2 = new SubscribeArgs()
             {
                 SendType = SendType.Fanout,
                 ExchangeName = "demo.test.Fanout",
@@ -56,7 +56,7 @@ namespace RabbitMQ.Consumer
 
             #region 訂閱Topic模式
 
-            var topicArgs = new MessageArgs()
+            var topicArgs = new SubscribeArgs()
             {
                 SendType = SendType.Topic,
                 ExchangeName = "demo.test.Topic",
