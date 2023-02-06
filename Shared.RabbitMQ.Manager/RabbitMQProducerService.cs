@@ -23,7 +23,9 @@ namespace Shared.RabbitMQ.Manager
         /// <param name="pushMessageArgs"></param>
         public void PushMessage<T>(PushMessageArgs<T> pushMessageArgs) where T : class
         {
-            SendMsg(pushMessageArgs, this._bus);
+            var message = new Message<object>(pushMessageArgs.SendData);
+            var exchange = _bus.Advanced.ExchangeDeclare(pushMessageArgs.ExchangeName, pushMessageArgs.SendType.ToString());
+            _bus.Advanced.Publish<object>(exchange, pushMessageArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message);
         }
 
         /// <summary>
@@ -33,26 +35,13 @@ namespace Shared.RabbitMQ.Manager
         /// <returns></returns>
         public async Task PushMessageAsync<T>(PushMessageArgs<T> pushMessageArgs) where T : class
         {
-            await SendMsgAsync(pushMessageArgs, this._bus);
-        }
-        
-        private async Task SendMsgAsync<T>(PushMessageArgs<T> pushMsgArgs, IBus bus) where T : class
-        {
-            var message = new Message<object>(pushMsgArgs.SendData);
-            var ex = RabbitMQExtension.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
-            await bus.Advanced.PublishAsync<object>(ex, pushMsgArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
+            var message = new Message<object>(pushMessageArgs.SendData);
+            var ex = await _bus.Advanced.ExchangeDeclareAsync(pushMessageArgs.ExchangeName, pushMessageArgs.SendType.ToString());
+            await _bus.Advanced.PublishAsync<object>(ex, pushMessageArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message).ContinueWith((Action<Task>)(task =>
             {
                 if (task.IsCompleted || !task.IsFaulted) ;
             }));
         }
-
-        private void SendMsg<T>(PushMessageArgs<T> pushMsgArgs, IBus bus) where T : class
-        {
-            var message = new Message<object>(pushMsgArgs.SendData);
-            var exchange = RabbitMQExtension.DeclareExchange(bus, pushMsgArgs.SendType, pushMsgArgs.ExchangeName);
-            bus.Advanced.Publish<object>(exchange, pushMsgArgs.RouteKey.ToSafeString(), false, (IMessage<object>)message);
-        }
-
 
     }
 }

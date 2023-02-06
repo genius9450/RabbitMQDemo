@@ -13,7 +13,7 @@ public class FanoutMessageConsume : IMessageConsume
 
     public void Consume(string message)
     {
-        _logger.LogInformation("Fanout 接收訊息: {message}", message);
+        _logger.LogInformation("fanout 接收訊息: {message}", message);
     }
 
 

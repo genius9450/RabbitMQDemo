@@ -25,7 +25,7 @@ namespace RabbitMQ.Consumer
 
             var directArgs = new MessageArgs()
             {
-                SendType = SendType.Direct,
+                SendType = SendType.direct,
                 ExchangeName = "demo.test.direct",
                 RabbitQueueName = "demo.test.direct.queue",
                 RouteName = "demo.1"
@@ -38,7 +38,7 @@ namespace RabbitMQ.Consumer
 
             var fanoutArgs = new MessageArgs()
             {
-                SendType = SendType.Fanout,
+                SendType = SendType.fanout,
                 ExchangeName = "demo.test.fanout",
                 RabbitQueueName = "demo.test.fanout.queue"
             };
@@ -46,7 +46,7 @@ namespace RabbitMQ.Consumer
 
             var fanoutArgs2 = new MessageArgs()
             {
-                SendType = SendType.Fanout,
+                SendType = SendType.fanout,
                 ExchangeName = "demo.test.fanout",
                 RabbitQueueName = "demo.test.fanout.queue.2"
             };
@@ -58,7 +58,7 @@ namespace RabbitMQ.Consumer
 
             var topicArgs = new MessageArgs()
             {
-                SendType = SendType.Topic,
+                SendType = SendType.topic,
                 ExchangeName = "demo.test.topic",
                 RabbitQueueName = "demo.test.topic.queue",
                 RouteName = "demo.topic.*"

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared.RabbitMQ.Manager.Model
+﻿namespace Shared.RabbitMQ.Manager.Model
 {
     public class PushMessageArgs<T> where T: class
     {
@@ -20,8 +14,8 @@ namespace Shared.RabbitMQ.Manager.Model
 
     public enum SendType
     {
-        Direct = 1,
-        Fanout = 2,
-        Topic = 3,
+        direct = 1,
+        fanout = 2,
+        topic = 3,
     }
 }

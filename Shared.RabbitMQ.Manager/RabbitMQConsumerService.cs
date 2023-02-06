@@ -30,8 +30,8 @@ namespace Shared.RabbitMQ.Manager
             if (string.IsNullOrEmpty(args.ExchangeName))
                 return;
 
-            var exchange = RabbitMQExtension.DeclareExchange(this._bus, args.SendType, args.ExchangeName);
-            var queue = RabbitMQExtension.QueueDeclare(this._bus, args);
+            var exchange = _bus.Advanced.ExchangeDeclare(args.ExchangeName, args.SendType.ToString());
+            var queue = string.IsNullOrEmpty(args.RabbitQueueName) ? _bus.Advanced.QueueDeclare() : _bus.Advanced.QueueDeclare(args.RabbitQueueName);
 
             this._bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
             this._bus.Advanced.Consume(queue, (body, properties, info) =>
@@ -50,26 +50,6 @@ namespace Shared.RabbitMQ.Manager
                 }
             });
         }
-
-        //private Queue QueueDeclare(MessageArgs args) => string.IsNullOrEmpty(args.RabbitQueueName) ? this._bus.Advanced.QueueDeclare() : this._bus.Advanced.QueueDeclare(args.RabbitQueueName);
-
-        //private static Exchange DeclareExchange(IBus bus, SendType sendType, string exchangeName)
-        //{
-        //    var exchange = new Exchange(); ;
-        //    switch (sendType)
-        //    {
-        //        case SendType.Direct:
-        //            exchange = bus.Advanced.ExchangeDeclare(exchangeName, "direct");
-        //            break;
-        //        case SendType.Fanout:
-        //            exchange = bus.Advanced.ExchangeDeclare(exchangeName, "fanout");
-        //            break;
-        //        case SendType.Topic:
-        //            exchange = bus.Advanced.ExchangeDeclare(exchangeName, "topic");
-        //            break;
-        //    }
-        //    return exchange;
-        //}
-
+        
     }
 }
