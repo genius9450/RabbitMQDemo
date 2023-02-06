@@ -1,13 +1,13 @@
 ﻿namespace Shared.RabbitMQ.Manager.Model;
 
-public class MessageArgs
+public class SubscribeArgs
 {
-    public SendType SendType { get; set; }
-
     public string ExchangeName { get; set; }
 
     public string RabbitQueueName { get; set; }
 
     public string RouteName { get; set; }
+
+    public SendType SendType { get; set; }
 
 }

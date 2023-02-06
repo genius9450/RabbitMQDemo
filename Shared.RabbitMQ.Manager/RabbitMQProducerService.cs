@@ -25,7 +25,7 @@ namespace Shared.RabbitMQ.Manager
         {
             var message = new Message<object>(args.SendData);
             var exchange = _bus.DeclareExchange(args.SendType, args.ExchangeName);
-            _bus.Advanced.Publish<object>(exchange, args.RouteKey.ToSafeString(), false, (IMessage<object>)message);
+            _bus.Advanced.Publish<object>(exchange, args.RouteKey.ToSafeString(), false, message);
         }
 
         /// <summary>
