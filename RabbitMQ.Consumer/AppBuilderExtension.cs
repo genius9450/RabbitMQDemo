@@ -1,10 +1,18 @@
-﻿using EasyNetQ;
+﻿using Autofac;
+using EasyNetQ;
 using Shared.RabbitMQ.Manager;
 
 namespace RabbitMQ.Consumer
 {
     public static class AppBuilderExtension
     {
+
+        public static void RegisterRabbitMqBus(this ContainerBuilder builder, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetValue<string>("RabbitMqConfig:ConnectionString");
+            builder.RegisterInstance(RabbitHutch.CreateBus(connectionString)).As<IBus>().SingleInstance();
+        }
+
         public static IApplicationBuilder MessageQueueSubscribe(this IApplicationBuilder appBuilder)
         {
             var services = appBuilder.ApplicationServices.CreateScope().ServiceProvider;

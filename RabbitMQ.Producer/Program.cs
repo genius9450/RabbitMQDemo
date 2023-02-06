@@ -1,4 +1,7 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using EasyNetQ;
+using RabbitMQ.Producer;
 using Shared.RabbitMQ.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +13,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// RabbitMQ DI
-builder.Services.AddSingleton(RabbitHutch.CreateBus(builder.Configuration.GetValue<string>("RabbitMQConfig:ConnectionString")));
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(b =>
+{
+    b.RegisterRabbitMqBus(builder.Configuration);
+});
+
 builder.Services.AddTransient<RabbitMQProducerService>();
 
 var app = builder.Build();

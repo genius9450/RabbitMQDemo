@@ -1,11 +1,9 @@
 using Autofac;
-using Autofac.Core.Activators.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using EasyNetQ;
 using RabbitMQ.Consumer;
 using RabbitMQ.Consumer.Consume;
 using Shared.RabbitMQ.Manager;
-using Microsoft.AspNetCore.Builder;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,14 +18,14 @@ builder.Services.AddSwaggerGen();
 // 初始化並建立一個實例
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-// RabbitMQ DI
-builder.Services.AddSingleton(RabbitHutch.CreateBus(builder.Configuration.GetValue<string>("RabbitMQConfig:ConnectionString")));
-builder.Services.AddTransient<RabbitMQConsumerService>();
+builder.Host.ConfigureContainer<ContainerBuilder>(b =>
+{
+    b.RegisterRabbitMqBus(builder.Configuration);
+});
 
-// 變更DI IMessageConsume
+builder.Services.AddTransient<RabbitMQConsumerService>();
 builder.Services.AddTransient<CommonMessageConsume>();
 builder.Services.AddTransient<FanoutMessageConsume>();
-
 builder.Services.AddTransient<SubscribeService>();
 
 builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq")); });
