@@ -19,7 +19,8 @@ namespace RabbitMQ.Consumer.Controllers
         [HttpPost("Init")]
         public void Init()
         {
-            _subscribeService.Subscribe();
+            _logger.LogInformation("init");
+            //_subscribeService.Subscribe();
         }
 
     }

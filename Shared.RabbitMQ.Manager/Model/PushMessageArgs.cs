@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Shared.RabbitMQ.Manager.Model
 {
-    public class PushMessageArgs
+    public class PushMessageArgs<T> where T: class
     {
-        public object SendMsg { get; set; }
-
         public SendType SendType { get; set; }
 
         public string ExchangeName { get; set; }
 
-        public string RouteName { get; set; }
+        public string RouteKey { get; set; }
+
+        public T SendData { get; set; }
 
     }
 
