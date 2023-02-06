@@ -24,7 +24,11 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // RabbitMQ DI
 builder.Services.AddSingleton(new RabbitMQManager(RabbitHutch.CreateBus(builder.Configuration["RabbitMqTcpConnectionString"])));
+
+// ≈‹ßÛDI IMessageConsume
 builder.Services.AddTransient<CommonMessageConsume>();
+
+builder.Services.AddTransient<SubscribeService>();
 
 builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq")); });
 

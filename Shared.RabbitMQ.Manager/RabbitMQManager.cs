@@ -37,7 +37,40 @@ namespace Shared.RabbitMQ.Manager
         /// </summary>
         /// <typeparam name="TConsume"></typeparam>
         /// <param name="args"></param>
-        public void Subscribe<TConsume>(MessageArgs args) where TConsume : IMessageConsume, new()
+        //public void Subscribe<TConsume>(MessageArgs args) where TConsume : IMessageConsume, new()
+        //{
+        //    if (string.IsNullOrEmpty(args.ExchangeName))
+        //        return;
+
+        //    var exchange = RabbitMQManager.DeclareExchange(this._bus, args.SendType, args.ExchangeName);
+        //    var queue = this.QueueDeclare(args);
+        //    this._bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
+        //    Expression<Action<TConsume>> methodCall;
+        //    this._bus.Advanced.Consume(queue, (body, properties, info) =>
+        //    {
+        //        var lockTaken = false;
+        //        try
+        //        {
+        //            Monitor.Enter(LockHelper, ref lockTaken);
+        //            var message = Encoding.UTF8.GetString(body.ToArray());
+        //            methodCall = (Expression<Action<TConsume>>)(job => job.Consume(message));
+        //            methodCall.Compile()(new TConsume());
+        //        }
+        //        finally
+        //        {
+        //            if (lockTaken)
+        //                Monitor.Exit(LockHelper);
+        //        }
+        //    });
+        //}
+
+        /// <summary>
+        /// 訂閱
+        /// </summary>
+        /// <typeparam name="TConsume"></typeparam>
+        /// <param name="args"></param>
+        /// <param name="consume"></param>
+        public void Subscribe<TConsume>(MessageArgs args, TConsume consume) where TConsume : IMessageConsume
         {
             if (string.IsNullOrEmpty(args.ExchangeName))
                 return;
@@ -45,7 +78,6 @@ namespace Shared.RabbitMQ.Manager
             var exchange = RabbitMQManager.DeclareExchange(this._bus, args.SendType, args.ExchangeName);
             var queue = this.QueueDeclare(args);
             this._bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
-            Expression<Action<TConsume>> methodCall;
             this._bus.Advanced.Consume(queue, (body, properties, info) =>
             {
                 var lockTaken = false;
@@ -53,8 +85,7 @@ namespace Shared.RabbitMQ.Manager
                 {
                     Monitor.Enter(LockHelper, ref lockTaken);
                     var message = Encoding.UTF8.GetString(body.ToArray());
-                    methodCall = (Expression<Action<TConsume>>)(job => job.Consume(message));
-                    methodCall.Compile()(new TConsume());
+                    consume.Consume(message);
                 }
                 finally
                 {

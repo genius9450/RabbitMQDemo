@@ -11,12 +11,13 @@ namespace RabbitMQ.Consumer
 
             var lifeTime = services.GetService<IHostApplicationLifetime>();
             var bus = services.GetService<IBus>();
-            var manager = services.GetService<RabbitMQManager>();
-            var logger = services.GetService<ILogger<MessageQueueService>>();
+            //var manager = services.GetService<RabbitMQManager>();
+            //var logger = services.GetService<ILogger<MessageQueueService>>();
+            var service = services.GetService<SubscribeService>();
 
-            if (lifeTime != null)
+            if (lifeTime != null && service != null)
             {
-                lifeTime.ApplicationStarted.Register(() => { new MessageQueueService(manager, logger).Subscribe(); });
+                lifeTime.ApplicationStarted.Register(() => { service.Subscribe(); });
                 lifeTime.ApplicationStopped.Register(() =>
                 {
                     if (bus != null)

@@ -6,10 +6,9 @@ namespace RabbitMQ.Consumer.Consume;
 public class CommonMessageConsume : IMessageConsume
 {
     private readonly ILogger<CommonMessageConsume> _logger;
-
-    public CommonMessageConsume()
+    public CommonMessageConsume(ILogger<CommonMessageConsume> logger)
     {
-        _logger = Consts.IocContainer.Resolve<ILogger<CommonMessageConsume>>(); ;
+        _logger = logger;
     }
 
     public void Consume(string message)

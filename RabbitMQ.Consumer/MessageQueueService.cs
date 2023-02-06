@@ -20,51 +20,51 @@ public class MessageQueueService
         try
         {
 
-            #region 訂閱Direct模式
+            //#region 訂閱Direct模式
 
-            var directArgs = new MessageArgs()
-            {
-                SendType = SendType.Direct,
-                ExchangeName = "demo.test.direct",
-                RabbitQueueName = "demo.test.direct.queue",
-                RouteName = "demo.1"
-            };
-            _manager.Subscribe<CommonMessageConsume>(directArgs);
+            //var directArgs = new MessageArgs()
+            //{
+            //    SendType = SendType.Direct,
+            //    ExchangeName = "demo.test.direct",
+            //    RabbitQueueName = "demo.test.direct.queue",
+            //    RouteName = "demo.1"
+            //};
+            //_manager.Subscribe<CommonMessageConsume>(directArgs);
 
-            #endregion
+            //#endregion
 
-            #region 訂閱Fanout模式
+            //#region 訂閱Fanout模式
 
-            var fanoutArgs = new MessageArgs()
-            {
-                SendType = SendType.Fanout,
-                ExchangeName = "demo.test.fanout",
-                RabbitQueueName = "demo.test.fanout.queue"
-            };
-            _manager.Subscribe<CommonMessageConsume>(fanoutArgs);
+            //var fanoutArgs = new MessageArgs()
+            //{
+            //    SendType = SendType.Fanout,
+            //    ExchangeName = "demo.test.fanout",
+            //    RabbitQueueName = "demo.test.fanout.queue"
+            //};
+            //_manager.Subscribe<CommonMessageConsume>(fanoutArgs);
 
-            var fanoutArgs2 = new MessageArgs()
-            {
-                SendType = SendType.Fanout,
-                ExchangeName = "demo.test.fanout",
-                RabbitQueueName = "demo.test.fanout.queue.2"
-            };
-            _manager.Subscribe<CommonMessageConsume>(fanoutArgs2);
+            //var fanoutArgs2 = new MessageArgs()
+            //{
+            //    SendType = SendType.Fanout,
+            //    ExchangeName = "demo.test.fanout",
+            //    RabbitQueueName = "demo.test.fanout.queue.2"
+            //};
+            //_manager.Subscribe<CommonMessageConsume>(fanoutArgs2);
 
-            #endregion
+            //#endregion
 
-            #region 訂閱Topic模式
+            //#region 訂閱Topic模式
 
-            var topicArgs = new MessageArgs()
-            {
-                SendType = SendType.Topic,
-                ExchangeName = "demo.test.topic",
-                RabbitQueueName = "demo.test.topic.queue",
-                RouteName = "demo.topic.*"
-            };
-            _manager.Subscribe<CommonMessageConsume>(topicArgs);
+            //var topicArgs = new MessageArgs()
+            //{
+            //    SendType = SendType.Topic,
+            //    ExchangeName = "demo.test.topic",
+            //    RabbitQueueName = "demo.test.topic.queue",
+            //    RouteName = "demo.topic.*"
+            //};
+            //_manager.Subscribe<CommonMessageConsume>(topicArgs);
 
-            #endregion
+            //#endregion
 
         }
         catch (Exception ex)
