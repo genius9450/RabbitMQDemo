@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Shared.RabbitMQ.Manager;
 using Shared.RabbitMQ.Manager.Model;
@@ -53,4 +54,18 @@ namespace RabbitMQ.Producer.Controllers
         }
 
     }
+
+    public class TestModel
+    {
+        public string Name { get; set; }
+
+        public List<string> Books { get; set; }
+
+        public int Age
+        {
+            get;
+            set;
+        }
+
+}
 }

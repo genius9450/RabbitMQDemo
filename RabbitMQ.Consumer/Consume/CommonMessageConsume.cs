@@ -11,10 +11,9 @@ public class CommonMessageConsume : IMessageConsume
         _logger = logger;
     }
 
-    public void Consume(string message)
+    public async Task ConsumeAsync(string message)
     {
+        await Task.Yield();
         _logger.LogInformation("接收訊息: {message}", message);
     }
-
-
 }

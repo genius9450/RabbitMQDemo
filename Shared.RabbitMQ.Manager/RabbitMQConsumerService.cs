@@ -37,14 +37,14 @@ namespace Shared.RabbitMQ.Manager
             var queue = string.IsNullOrEmpty(args.RabbitQueueName) ? _bus.Advanced.QueueDeclare() : _bus.Advanced.QueueDeclare(args.RabbitQueueName);
 
             _bus.Advanced.Bind(exchange, queue, args.RouteName.ToSafeString());
-            _bus.Advanced.Consume(queue, (body, properties, info) =>
+            _bus.Advanced.Consume(queue,   async (body, properties, info) =>
             {
                 var lockTaken = false;
                 try
                 {
                     Monitor.Enter(LockHelper, ref lockTaken);
                     var message = Encoding.UTF8.GetString(body.ToArray());
-                    consume.Consume(message);
+                    await consume.ConsumeAsync(message);
                 }
                 finally
                 {
