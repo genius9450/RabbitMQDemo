@@ -24,8 +24,8 @@ builder.Host.ConfigureContainer<ContainerBuilder>(b =>
 });
 
 builder.Services.AddTransient<RabbitMQConsumerService>();
-builder.Services.AddTransient<CommonMessageConsume>();
-builder.Services.AddTransient<FanoutMessageConsume>();
+builder.Services.AddTransient<CommonMessageConsumer>();
+builder.Services.AddTransient<FanoutMessageConsumer>();
 builder.Services.AddTransient<SubscribeService>();
 
 builder.Services.AddLogging(loggingBuilder => { loggingBuilder.AddSeq(builder.Configuration.GetSection("Seq")); });

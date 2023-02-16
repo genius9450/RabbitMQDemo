@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExchangeType = Shared.RabbitMQ.Manager.Model.ExchangeType;
 
 namespace Shared.RabbitMQ.Manager.Extension
 {
@@ -13,18 +14,18 @@ namespace Shared.RabbitMQ.Manager.Extension
     {
         public static string ToSafeString(this object obj) => obj == null ? "" : obj.ToString();
 
-        public static Exchange DeclareExchange(this IBus bus, SendType sendType, string exchangeName)
+        public static Exchange DeclareExchange(this IBus bus, ExchangeType exchangeType, string exchangeName)
         {
             var exchange = new Exchange(); ;
-            switch (sendType)
+            switch (exchangeType)
             {
-                case SendType.Direct:
+                case ExchangeType.Direct:
                     exchange = bus.Advanced.ExchangeDeclare(exchangeName, "direct");
                     break;
-                case SendType.Fanout:
+                case ExchangeType.FanOut:
                     exchange = bus.Advanced.ExchangeDeclare(exchangeName, "fanout");
                     break;
-                case SendType.Topic:
+                case ExchangeType.Topic:
                     exchange = bus.Advanced.ExchangeDeclare(exchangeName, "topic");
                     break;
             }

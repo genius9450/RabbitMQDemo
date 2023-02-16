@@ -24,11 +24,23 @@ namespace Shared.RabbitMQ.Manager
         /// 推播訊息
         /// </summary>
         /// <param name="args"></param>
-        public void PushMessage<T>(PushMessageArgs<T> args) where T : class
+        public bool PushMessage<T>(PushMessageArgs<T> args) where T : class
         {
-            var message = new Message<object>(args.SendData);
-            var exchange = _bus.DeclareExchange(args.SendType, args.ExchangeName);
-            _bus.Advanced.Publish<object>(exchange, args.RouteKey.ToSafeString(), false, message);
+            bool isSuccess;
+            try
+            {
+                var message = new Message<object>(args.SendData);
+                var exchange = _bus.DeclareExchange(args.ExchangeType, args.ExchangeName);
+                _bus.Advanced.Publish<object>(exchange, args.RouteKey.ToSafeString(), false, message);
+                isSuccess = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                isSuccess = false;
+            }
+
+            return isSuccess;
         }
 
         /// <summary>
@@ -36,14 +48,26 @@ namespace Shared.RabbitMQ.Manager
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public async Task PushMessageAsync<T>(PushMessageArgs<T> args) where T : class
+        public async Task<bool> PushMessageAsync<T>(PushMessageArgs<T> args) where T : class
         {
-            var message = new Message<object>(args.SendData);
-            var ex = _bus.DeclareExchange(args.SendType, args.ExchangeName);
-            await _bus.Advanced.PublishAsync<object>(ex, args.RouteKey.ToSafeString(), false, message).ContinueWith(task =>
+            var isSuccess = false;
+            try
             {
-                if (task.IsCompleted || !task.IsFaulted) ;
-            });
+                var message = new Message<object>(args.SendData);
+                var ex = _bus.DeclareExchange(args.ExchangeType, args.ExchangeName);
+                await _bus.Advanced.PublishAsync<object>(ex, args.RouteKey.ToSafeString(), false, message)
+                    .ContinueWith(task =>
+                    {
+                        isSuccess = task.IsCompletedSuccessfully;
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                isSuccess = false;
+            }
+
+            return isSuccess;
         }
 
     }

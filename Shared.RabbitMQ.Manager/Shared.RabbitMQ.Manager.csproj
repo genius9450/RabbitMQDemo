@@ -12,8 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="EasyNetQ" Version="7.4.3" />
     <PackageReference Include="EasyNetQ.Serialization.NewtonsoftJson" Version="7.4.3" />
+    <PackageReference Include="Seq.Extensions.Logging" Version="6.1.0" />
   </ItemGroup>
 
 </Project>

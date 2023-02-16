@@ -6,64 +6,86 @@ namespace RabbitMQ.Consumer
 {
     public class SubscribeService
     {
+        private readonly ILogger<SubscribeService> _logger;
         private readonly RabbitMQConsumerService _consumerService;
-        private readonly CommonMessageConsume _commonConsume;
-        private readonly FanoutMessageConsume _fanoutConsume;
+        private readonly CommonMessageConsumer _commonConsumer;
+        private readonly FanoutMessageConsumer _fanoutConsumer;
 
-        public SubscribeService(RabbitMQConsumerService consumerService, CommonMessageConsume commonConsume, FanoutMessageConsume fanoutConsume)
+        public SubscribeService( ILogger<SubscribeService> logger, RabbitMQConsumerService consumerService, CommonMessageConsumer commonConsumer, FanoutMessageConsumer fanoutConsumer)
         {
+            _logger = logger;
             _consumerService = consumerService;
-            _commonConsume = commonConsume;
-            _fanoutConsume = fanoutConsume;
+            _commonConsumer = commonConsumer;
+            _fanoutConsumer = fanoutConsumer;
         }
 
 
         public void Subscribe()
         {
+            _logger.LogInformation("SubscribeService Start");
 
             #region 訂閱Direct模式
 
-            var directArgs = new SubscribeArgs()
-            {
-                SendType = SendType.Direct,
-                ExchangeName = "demo.test.Direct",
-                RabbitQueueName = "demo.test.Direct.queue",
-                RouteName = "demo.1"
-            };
-            _consumerService.Subscribe<CommonMessageConsume>(directArgs, _commonConsume);
+            //var directArgs = new SubscriberInfo()
+            //{
+            //    ExchangeType = ExchangeType.Direct,
+            //    ExchangeName = "demo.test.Direct",
+            //    QueueName = "demo.test.Direct.queue",
+            //    RouteName = "demo.1"
+            //};
+            //_consumerService.SubscribeWithLock<CommonMessageConsumer>(directArgs, _commonConsumer);
 
             #endregion
 
             #region 訂閱Fanout模式
 
-            var fanoutArgs = new SubscribeArgs()
+            var fanoutArgs = new SubscriberInfo()
             {
-                SendType = SendType.Fanout,
-                ExchangeName = "demo.test.Fanout",
-                RabbitQueueName = "demo.test.Fanout.queue"
+                ExchangeType = ExchangeType.FanOut,
+                ExchangeName = "demo.test.FanOut",
+                QueueName = "demo.test.FanOut.queue",
+                Mode = Mode.Lock
             };
-            _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs, _fanoutConsume);
+            //_consumerService.SubscribeWithLock<FanoutMessageConsumer>(fanoutArgs, _fanoutConsumer);
+            _consumerService.Subscribe<FanoutMessageConsumer>(fanoutArgs, _fanoutConsumer);
+            //_consumerService.Subscribe<FanoutMessageConsumer>(fanoutArgs);
 
-            var fanoutArgs2 = new SubscribeArgs()
-            {
-                SendType = SendType.Fanout,
-                ExchangeName = "demo.test.Fanout",
-                RabbitQueueName = "demo.test.Fanout.queue.2"
-            };
-            _consumerService.Subscribe<FanoutMessageConsume>(fanoutArgs2, _fanoutConsume);
+            //var fanoutArgs2 = new SubscriberInfo()
+            //{
+            //    ExchangeType = ExchangeType.FanOut,
+            //    ExchangeName = "demo.test.FanOut",
+            //    QueueName = "demo.test.FanOut.queue.2"
+            //};
+            //_consumerService.SubscribeWithLock<FanoutMessageConsumer>(fanoutArgs2, _fanoutConsumer);
+
+            //var fanoutArgs = new SubscriberInfo()
+            //{
+            //    ExchangeType = ExchangeType.FanOut,
+            //    ExchangeName = "webhook.message.exchange",
+            //    QueueName = "webhook.message.messagecounter.queue"
+            //};
+            //_consumerService.SubscribeWithLock<FanoutMessageConsumer>(fanoutArgs, _fanoutConsumer);
+
+            //var fanoutArgs2 = new SubscriberInfo()
+            //{
+            //    ExchangeType = ExchangeType.FanOut,
+            //    ExchangeName = "webhook.message.exchange",
+            //    QueueName = "webhook.message.messageautoreply.queue"
+            //};
+            //_consumerService.SubscribeWithLock<FanoutMessageConsumer>(fanoutArgs2, _fanoutConsumer);
 
             #endregion
 
             #region 訂閱Topic模式
 
-            var topicArgs = new SubscribeArgs()
-            {
-                SendType = SendType.Topic,
-                ExchangeName = "demo.test.Topic",
-                RabbitQueueName = "demo.test.Topic.queue",
-                RouteName = "demo.Topic.*"
-            };
-            _consumerService.Subscribe<CommonMessageConsume>(topicArgs, _commonConsume);
+            //var topicArgs = new SubscriberInfo()
+            //{
+            //    ExchangeType = ExchangeType.Topic,
+            //    ExchangeName = "demo.test.Topic",
+            //    QueueName = "demo.test.Topic.queue",
+            //    RouteName = "demo.Topic.*"
+            //};
+            //_consumerService.SubscribeWithLock<CommonMessageConsumer>(topicArgs, _commonConsumer);
 
             #endregion
 

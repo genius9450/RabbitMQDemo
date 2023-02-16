@@ -21,10 +21,11 @@ namespace RabbitMQ.Producer.Controllers
         [HttpPost("SendDirect")]
         public async Task SendDirectAsync (string message)
         {
-            await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>()
+            var result = await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>()
             {
-                SendType = SendType.Direct,
-                ExchangeName = "demo.test.Direct",
+                ExchangeType = ExchangeType.Direct,
+                //ExchangeName = "demo.test.Direct",
+                ExchangeName = "demo.test.Fanout",
                 RouteKey = "demo.1",
                 SendData = $"Direct({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
             });
@@ -35,9 +36,9 @@ namespace RabbitMQ.Producer.Controllers
         {
             await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>
             {
-                SendType = SendType.Fanout,
-                ExchangeName = "demo.test.Fanout",
-                SendData = $"Fanout({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
+                ExchangeType = ExchangeType.FanOut,
+                ExchangeName = "demo.test.FanOut",
+                SendData = $"FanOut({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}"
             });
         }
 
@@ -46,7 +47,7 @@ namespace RabbitMQ.Producer.Controllers
         {
             await _mqService.PushMessageAsync<string>(new PushMessageArgs<string>
             {
-                SendType = SendType.Topic,
+                ExchangeType = ExchangeType.Topic,
                 ExchangeName = "demo.test.Topic",
                 SendData = $"Topic({DateTime.Now:yyyy-MM-dd HH:mm:ss}): {message}",
                 RouteKey = "demo.Topic.1"
@@ -54,18 +55,5 @@ namespace RabbitMQ.Producer.Controllers
         }
 
     }
-
-    public class TestModel
-    {
-        public string Name { get; set; }
-
-        public List<string> Books { get; set; }
-
-        public int Age
-        {
-            get;
-            set;
-        }
-
-}
+    
 }

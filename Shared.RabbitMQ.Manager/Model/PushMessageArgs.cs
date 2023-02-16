@@ -2,7 +2,7 @@
 {
     public class PushMessageArgs<T> where T: class
     {
-        public SendType SendType { get; set; }
+        public ExchangeType ExchangeType { get; set; }
 
         public string ExchangeName { get; set; }
 
@@ -12,10 +12,10 @@
 
     }
 
-    public enum SendType
+    public enum ExchangeType
     {
         Direct = 1,
-        Fanout = 2,
+        FanOut = 2,
         Topic = 3,
     }
 }
